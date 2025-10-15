@@ -1,8 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { MicroServiceApplicationConfig } from '@ross2p/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+  const app =
+    await MicroServiceApplicationConfig.create<NestExpressApplication>(
+      AppModule,
+    );
+
+  app.init();
+  await app.start();
 }
-bootstrap();
+void bootstrap();
