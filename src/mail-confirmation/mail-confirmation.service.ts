@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientService, UserQuery, Services } from '@ross2p/common';
-import { UserEntity } from '@ross2p/database';
+import type { NotificationUserView } from '../user.view';
 import { EmailService } from '../email/email.service';
 import { MailConfirmationTemplate } from './mail-confirmation.template';
 
@@ -13,10 +13,10 @@ export class MailConfirmationService {
   ) {}
 
   async sendConfirmationEmail(userId: string, confirmationCode: string) {
-    const user = await this.userService.firstValueFrom<UserEntity, string>(
-      UserQuery.GET_BY_ID,
-      userId,
-    );
+    const user = await this.userService.sendAndReturnPromise<
+      NotificationUserView,
+      { userId: string }
+    >(UserQuery.GET_BY_ID, { userId });
 
     await this.emailService.sendEmailWithTemplate(
       user.email,
