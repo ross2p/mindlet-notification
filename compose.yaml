@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  notification-service:
+    build:
+      dockerfile: Dockerfile
+    hostname: notification-service
+    ports:
+      - "${BACKEND_PORT:-3007}:3000"
+    env_file:
+      - ./.env
+    networks:
+      - app-network
+    command: npm run start:prod
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
