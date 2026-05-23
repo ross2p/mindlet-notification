@@ -3,12 +3,15 @@ version: "3.8"
 services:
   notification-service:
     build:
+      context: .
       dockerfile: Dockerfile
     hostname: notification-service
     ports:
       - "${BACKEND_PORT:-3007}:3000"
     env_file:
       - ./.env
+    environment:
+      KAFKA_BROKER: ${KAFKA_BROKER:-kafka:29092}
     networks:
       - app-network
     command: npm run start:prod
