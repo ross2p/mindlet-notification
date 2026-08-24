@@ -3,7 +3,7 @@ import { EmailDto } from './dtos/email.dto';
 import { IEmailTemplate } from './interfaces/email-template.interface';
 
 @Injectable()
-export class BaseEmailService {
+export class EmailService {
   private async sendEmail(to: string, emailDto: EmailDto): Promise<void> {
     //todo: implement actual email sending logic using nodemailer or any email service provider
     console.log(`Sending email to ${to} with subject ${emailDto.subject}`);

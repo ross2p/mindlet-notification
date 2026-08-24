@@ -1,4 +1,4 @@
-import { IEmailTemplate } from '../base-email/interfaces/email-template.interface';
+import { IEmailTemplate } from '../email/interfaces/email-template.interface';
 
 export class WelcomeEmailTemplateDto implements IEmailTemplate {
   constructor(private readonly userName: string) {}

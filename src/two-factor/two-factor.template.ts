@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IEmailTemplate } from '../base-email/interfaces/email-template.interface';
+import { IEmailTemplate } from '../email/interfaces/email-template.interface';
 
 @Injectable()
 export class TwoFactorTemplate implements IEmailTemplate {

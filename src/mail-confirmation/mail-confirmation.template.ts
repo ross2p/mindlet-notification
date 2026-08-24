@@ -1,4 +1,4 @@
-import { IEmailTemplate } from '../base-email/interfaces/email-template.interface';
+import { IEmailTemplate } from '../email/interfaces/email-template.interface';
 
 export class MailConfirmationTemplate implements IEmailTemplate {
   private readonly confirmationCode: string;
