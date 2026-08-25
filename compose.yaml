@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     hostname: notification-service
     ports:
-      - "${BACKEND_PORT:-3007}:3000"
+      - "${BACKEND_PORT:-4007}:3000"
     env_file:
       - ./.env
     environment:
