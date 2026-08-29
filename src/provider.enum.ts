@@ -1,4 +1,4 @@
 export enum Provider {
-    EMAIL,
-    PHONE
+  EMAIL = 'EMAIL',
+  PHONE = 'PHONE',
 }

@@ -1,23 +1,27 @@
-import { MessagePattern } from '@nestjs/microservices';
 import { Controller } from '@nestjs/common';
-import { DataPayload, ValidationPipe } from '@ross2p/common';
+import { MessagePattern } from '@nestjs/microservices';
+import {
+  DataPayload,
+  NotificationMessage,
+  ValidationPipe,
+} from '@ross2p/common';
+import { SendTwoFactorDto } from './dtos/send-two-factor.dto';
 import { twoFactorSchema } from './two-factor.schema';
 import { TwoFactorService } from './two-factor.service';
-import { Provider } from 'src/provider.enum';
 
-@Controller('two-factor')
+@Controller()
 export class TwoFactorController {
   constructor(private readonly twoFactorService: TwoFactorService) {}
 
-  @MessagePattern('notification.send-two-factor')
+  @MessagePattern(NotificationMessage.SEND_TWO_FACTOR)
   public async sendTwoFactor(
     @DataPayload(new ValidationPipe(twoFactorSchema))
-    data: {
-      userId: string;
-      code: string;
-      provider: Provider
-    },
+    data: SendTwoFactorDto,
   ) {
-    return this.twoFactorService.sendTwoFactor(data.provider, data.userId, data.code);
+    return this.twoFactorService.sendTwoFactor(
+      data.provider,
+      data.userId,
+      data.code,
+    );
   }
 }

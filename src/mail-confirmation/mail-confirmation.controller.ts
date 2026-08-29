@@ -1,8 +1,13 @@
 import { Controller } from '@nestjs/common';
-import { MailConfirmationService } from './mail-confirmation.service';
-import { DataPayload, ValidationPipe } from '@ross2p/common';
 import { MessagePattern } from '@nestjs/microservices';
+import {
+  DataPayload,
+  NotificationMessage,
+  ValidationPipe,
+} from '@ross2p/common';
+import { SendMailConfirmationDto } from './dtos/send-mail-confirmation.dto';
 import { mailConfirmationSchema } from './mail-confirmation.schema';
+import { MailConfirmationService } from './mail-confirmation.service';
 
 @Controller()
 export class MailConfirmationController {
@@ -10,13 +15,10 @@ export class MailConfirmationController {
     private readonly mailConfirmationService: MailConfirmationService,
   ) {}
 
-  @MessagePattern('email.send-mail-confirmation')
+  @MessagePattern(NotificationMessage.SEND_MAIL_CONFIRMATION)
   public async sendMailConfirmation(
     @DataPayload(new ValidationPipe(mailConfirmationSchema))
-    data: {
-      userId: string;
-      code: string;
-    },
+    data: SendMailConfirmationDto,
   ) {
     return this.mailConfirmationService.sendConfirmationEmail(
       data.userId,

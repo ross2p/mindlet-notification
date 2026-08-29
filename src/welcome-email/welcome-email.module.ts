@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { WelcomeEmailService } from './welcome-email.service';
 import { ClientModule, Services } from '@ross2p/common';
+import { WelcomeEmailController } from './welcome-email.controller';
+import { WelcomeEmailService } from './welcome-email.service';
 
 @Module({
-  providers: [WelcomeEmailService],
   imports: [ClientModule.register(Services.USER)],
+  controllers: [WelcomeEmailController],
+  providers: [WelcomeEmailService],
 })
 export class WelcomeEmailModule {}
