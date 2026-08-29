@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { MailConfirmationService } from './mail-confirmation.service';
+import { ClientModule, Services } from '@ross2p/common';
 import { MailConfirmationController } from './mail-confirmation.controller';
+import { MailConfirmationService } from './mail-confirmation.service';
 
 @Module({
+  imports: [ClientModule.register(Services.USER)],
+  controllers: [MailConfirmationController],
   providers: [MailConfirmationService],
-  controllers: [MailConfirmationController]
 })
 export class MailConfirmationModule {}

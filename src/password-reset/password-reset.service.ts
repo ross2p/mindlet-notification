@@ -1,12 +1,11 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientService, Services, UserQuery } from '@ross2p/common';
 import { EmailService } from '../email/email.service';
-import { Provider } from '../provider.enum';
 import type { NotificationUserView } from '../user.view';
-import { TwoFactorTemplate } from './two-factor.template';
+import { PasswordResetTemplate } from './password-reset.template';
 
 @Injectable()
-export class TwoFactorService implements OnModuleInit {
+export class PasswordResetService implements OnModuleInit {
   constructor(
     private readonly emailService: EmailService,
     @Inject(Services.USER)
@@ -18,7 +17,7 @@ export class TwoFactorService implements OnModuleInit {
     await this.userService.connect();
   }
 
-  async sendTwoFactorEmail(userId: string, code: string) {
+  async sendPasswordResetEmail(userId: string, token: string) {
     const user = await this.userService.sendAndReturnPromise<
       NotificationUserView,
       { userId: string }
@@ -26,11 +25,7 @@ export class TwoFactorService implements OnModuleInit {
 
     await this.emailService.sendEmailWithTemplate(
       user.email,
-      new TwoFactorTemplate(code),
+      new PasswordResetTemplate(token),
     );
-  }
-
-  async sendTwoFactor(_provider: Provider, userId: string, code: string) {
-    return this.sendTwoFactorEmail(userId, code);
   }
 }
