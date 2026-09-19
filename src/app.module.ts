@@ -13,10 +13,12 @@ import { MailConfirmationModule } from './mail-confirmation/mail-confirmation.mo
 import { PasswordResetModule } from './password-reset/password-reset.module';
 import { TwoFactorModule } from './two-factor/two-factor.module';
 import { WelcomeEmailModule } from './welcome-email/welcome-email.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     CommonModule,
+    DatabaseModule,
     EmailModule,
     WelcomeEmailModule,
     MailConfirmationModule,
