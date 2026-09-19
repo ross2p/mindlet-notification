@@ -20,7 +20,7 @@
 
 ## Canonical references
 
-- Cross-service catalog: `mindlet-api/docs/services.md` (file not added yet; TBD per [services architecture plan](../../../.cursor/plans/services_architecture_doc_608f37a2.plan.md))
+- Cross-service catalog: `mindlet-api/docs/services.md` (file not added yet; TBD)
 - Domain model: [../../../docs/02-domain-model.md](../../../docs/02-domain-model.md)
 - Roles & permissions: [../../../docs/03-roles-and-permissions.md](../../../docs/03-roles-and-permissions.md)
 - Kafka events catalog: [../../docs/kafka-events.md](../../docs/kafka-events.md)
