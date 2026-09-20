@@ -14,6 +14,7 @@ import { PasswordResetModule } from './password-reset/password-reset.module';
 import { TwoFactorModule } from './two-factor/two-factor.module';
 import { WelcomeEmailModule } from './welcome-email/welcome-email.module';
 import { DatabaseModule } from './database/database.module';
+import { EmailChangeModule } from './email-change/email-change.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DatabaseModule } from './database/database.module';
     MailConfirmationModule,
     PasswordResetModule,
     TwoFactorModule,
+    EmailChangeModule,
   ],
   providers: [
     {
