@@ -1,6 +1,44 @@
 version: "3.8"
 
 services:
+  notification-db:
+    image: postgres:17
+    hostname: notification_db
+    ports:
+      - "${DATABASE_PORT:-5440}:5432"
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME:-mindlet}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-mindlet}
+      POSTGRES_DB: ${DATABASE_NAME:-mindlet_notification}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    env_file:
+      - ./.env
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME:-mindlet} -d ${DATABASE_NAME:-mindlet_notification}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  notification-migrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    command: npx prisma migrate deploy
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_URL: postgresql://${DATABASE_USERNAME:-mindlet}:${DATABASE_PASSWORD:-mindlet}@notification_db:5432/${DATABASE_NAME:-mindlet_notification}?schema=public
+    depends_on:
+      notification-db:
+        condition: service_healthy
+    networks:
+      - app-network
+
   notification-service:
     build:
       context: .
@@ -12,6 +50,12 @@ services:
       - ./.env
     environment:
       KAFKA_BROKER: ${KAFKA_BROKER:-kafka:29092}
+      DATABASE_HOST: notification_db
+      DATABASE_PORT: 5432
+      DATABASE_URL: postgresql://${DATABASE_USERNAME:-mindlet}:${DATABASE_PASSWORD:-mindlet}@notification_db:5432/${DATABASE_NAME:-mindlet_notification}?schema=public
+    depends_on:
+      notification-db:
+        condition: service_healthy
     networks:
       - app-network
     command: npm run start:prod
@@ -20,3 +64,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  notification_db_data:
