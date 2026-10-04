@@ -1,5 +1,5 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ClientService, Services, UserQuery } from '@ross2p/common';
+import { EventClientService, Services, UserQuery } from '@ross2p/common';
 import { EmailService } from '../email/email.service';
 import { Provider } from '../provider.enum';
 import type { NotificationUserView } from '../user.view';
@@ -10,7 +10,7 @@ export class TwoFactorService implements OnModuleInit {
   constructor(
     private readonly emailService: EmailService,
     @Inject(Services.USER)
-    private readonly userService: ClientService,
+    private readonly userService: EventClientService,
   ) {}
 
   async onModuleInit() {
