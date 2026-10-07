@@ -13,3 +13,6 @@ spec:
     - name: http
       port: 3000
       targetPort: http
+    - name: grpc
+      port: 50059
+      targetPort: grpc

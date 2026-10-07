@@ -1,7 +1,7 @@
-import { Provider } from '../../provider.enum';
+import { NotificationCoreProto } from '@ross2p/common';
 
 export class SendTwoFactorDto {
   userId!: string;
   code!: string;
-  provider!: Provider;
+  provider!: NotificationCoreProto.Provider;
 }

@@ -1,30 +1,32 @@
-import { updatePreferenceMessageSchema } from '@ross2p/types';
 import { Controller } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import {
-  NotificationMessage,
-  NotificationQuery,
-  ValidationPipe,
-  DataPayload,
-} from '@ross2p/common';
-import { UserIdMessageDto } from './dto/user-id-message.dto';
-import { UpdatePreferenceMessageDto } from './dto/update-preference-message.dto';
+import { GrpcMethod } from '@nestjs/microservices';
+import { NotificationPreferenceProto, ValidationPipe } from '@ross2p/common';
+import { updatePreferenceMessageSchema } from '@ross2p/types';
+import type { UpdatePreferenceMessageType } from '@ross2p/types';
 import { PreferenceService } from './preference.service';
 
 @Controller()
-export class PreferenceController {
+export class PreferenceController
+  implements NotificationPreferenceProto.PreferenceServiceController
+{
   constructor(private readonly preferenceService: PreferenceService) {}
 
-  @MessagePattern(NotificationQuery.GET_PREFERENCES)
-  public getPreferences(@DataPayload() data: UserIdMessageDto) {
-    return this.preferenceService.getPreferences(data.userId);
+  @GrpcMethod('PreferenceService', 'listPreferences')
+  public async listPreferences(
+    request: NotificationPreferenceProto.UserIdRequest,
+  ): Promise<NotificationPreferenceProto.PreferenceList> {
+    return {
+      preferences: await this.preferenceService.getPreferences(request.userId),
+    };
   }
 
-  @MessagePattern(NotificationMessage.UPDATE_PREFERENCE)
+  @GrpcMethod('PreferenceService', 'updatePreference')
   public updatePreference(
-    @DataPayload(new ValidationPipe(updatePreferenceMessageSchema))
-    data: UpdatePreferenceMessageDto,
-  ) {
+    request: NotificationPreferenceProto.UpdatePreferenceRequest,
+  ): Promise<NotificationPreferenceProto.PreferenceMessage> {
+    const data = new ValidationPipe<UpdatePreferenceMessageType>(
+      updatePreferenceMessageSchema,
+    ).transform(request);
     return this.preferenceService.updatePreference(
       data.userId,
       data.eventType,
