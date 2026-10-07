@@ -9,12 +9,8 @@ import {
   RpcExpiryInterceptor,
 } from '@ross2p/common';
 import { EmailModule } from './email/email.module';
-import { MailConfirmationModule } from './mail-confirmation/mail-confirmation.module';
-import { PasswordResetModule } from './password-reset/password-reset.module';
-import { TwoFactorModule } from './two-factor/two-factor.module';
-import { WelcomeEmailModule } from './welcome-email/welcome-email.module';
+import { NotificationModule } from './notification/notification.module';
 import { DatabaseModule } from './database/database.module';
-import { EmailChangeModule } from './email-change/email-change.module';
 import { PreferenceModule } from './preference/preference.module';
 
 @Module({
@@ -22,11 +18,7 @@ import { PreferenceModule } from './preference/preference.module';
     CommonModule,
     DatabaseModule,
     EmailModule,
-    WelcomeEmailModule,
-    MailConfirmationModule,
-    PasswordResetModule,
-    TwoFactorModule,
-    EmailChangeModule,
+    NotificationModule,
     PreferenceModule,
   ],
   providers: [

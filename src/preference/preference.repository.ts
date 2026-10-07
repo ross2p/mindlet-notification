@@ -3,6 +3,8 @@ import type { NotificationChannel } from '.prisma/client-notification';
 import { DatabaseService } from '../database/database.service';
 import { PreferenceEntity } from './preference.entity';
 
+// Prisma returns `channel` as a string-literal union while `PreferenceEntity.channel` is the gRPC
+// `NotificationChannel` enum (same values, nominally different types), so rows are asserted once here.
 @Injectable()
 export class PreferenceRepository {
   constructor(private readonly db: DatabaseService) {}
@@ -29,10 +31,12 @@ export class PreferenceRepository {
       where: { userId_eventType_channel: { userId, eventType, channel } },
       create: { userId, eventType, channel, enabled },
       update: { enabled },
-    });
+    }) as Promise<PreferenceEntity>;
   }
 
   public findAllForUser(userId: string): Promise<PreferenceEntity[]> {
-    return this.db.notificationPreference.findMany({ where: { userId } });
+    return this.db.notificationPreference.findMany({
+      where: { userId },
+    }) as Promise<PreferenceEntity[]>;
   }
 }

@@ -21,6 +21,12 @@ spec:
       ports:
         - protocol: TCP
           port: 3000
+    # gRPC from sibling services in the namespace
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 50059
   egress:
     - to:
         - namespaceSelector:
