@@ -1,4 +1,4 @@
-import { NotificationPreferenceProto } from '@ross2p/common';
+import { NotificationPreferenceProto } from '../../generated/protos';
 import { PreferenceController } from './preference.controller';
 
 const USER_ID = '018f0000-0000-7000-8000-000000000001';

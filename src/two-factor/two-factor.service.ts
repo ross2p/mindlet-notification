@@ -1,10 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import {
-  EventClientService,
-  NotificationCoreProto,
-  Services,
-  UserQuery,
-} from '@ross2p/common';
+import { EventClientService, Services, UserQuery } from '@ross2p/common';
+import { NotificationCoreProto } from '../../generated/protos';
 import { EmailService } from '../email/email.service';
 import type { NotificationUserView } from '../user.view';
 import { TwoFactorTemplate } from './two-factor.template';

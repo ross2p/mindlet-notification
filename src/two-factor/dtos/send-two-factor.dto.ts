@@ -1,4 +1,4 @@
-import { NotificationCoreProto } from '@ross2p/common';
+import { NotificationCoreProto } from '../../../generated/protos';
 
 export class SendTwoFactorDto {
   userId!: string;

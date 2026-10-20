@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { NotificationPreferenceProto, ValidationPipe } from '@ross2p/common';
+import { GrpcRequest, ValidationPipe } from '@ross2p/common';
+import { NotificationPreferenceProto } from '../../generated/protos';
 import { updatePreferenceMessageSchema } from '@ross2p/types';
 import type { UpdatePreferenceMessageType } from '@ross2p/types';
 import { PreferenceService } from './preference.service';
@@ -22,11 +23,13 @@ export class PreferenceController
 
   @GrpcMethod('PreferenceService', 'updatePreference')
   public updatePreference(
-    request: NotificationPreferenceProto.UpdatePreferenceRequest,
+    @GrpcRequest(
+      new ValidationPipe<UpdatePreferenceMessageType>(
+        updatePreferenceMessageSchema,
+      ),
+    )
+    data: UpdatePreferenceMessageType,
   ): Promise<NotificationPreferenceProto.PreferenceMessage> {
-    const data = new ValidationPipe<UpdatePreferenceMessageType>(
-      updatePreferenceMessageSchema,
-    ).transform(request);
     return this.preferenceService.updatePreference(
       data.userId,
       data.eventType,

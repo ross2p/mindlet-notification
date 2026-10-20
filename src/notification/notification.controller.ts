@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { NotificationCoreProto, ValidationPipe } from '@ross2p/common';
+import { GrpcRequest, ValidationPipe } from '@ross2p/common';
+import { NotificationCoreProto } from '../../generated/protos';
 import { SendEmailChangeCodeDto } from '../email-change/dtos/send-email-change-code.dto';
 import { SendEmailChangeWarningDto } from '../email-change/dtos/send-email-change-warning.dto';
 import {
@@ -35,11 +36,11 @@ export class NotificationController
 
   @GrpcMethod('NotificationService', 'sendMailConfirmation')
   public async sendMailConfirmation(
-    request: NotificationCoreProto.SendMailConfirmationRequest,
+    @GrpcRequest(
+      new ValidationPipe<SendMailConfirmationDto>(mailConfirmationSchema),
+    )
+    data: SendMailConfirmationDto,
   ): Promise<NotificationCoreProto.Empty> {
-    const data = new ValidationPipe<SendMailConfirmationDto>(
-      mailConfirmationSchema,
-    ).transform(request);
     await this.mailConfirmationService.sendConfirmationEmail(
       data.userId,
       data.code,
@@ -49,11 +50,9 @@ export class NotificationController
 
   @GrpcMethod('NotificationService', 'sendTwoFactor')
   public async sendTwoFactor(
-    request: NotificationCoreProto.SendTwoFactorRequest,
+    @GrpcRequest(new ValidationPipe<SendTwoFactorDto>(twoFactorSchema))
+    data: SendTwoFactorDto,
   ): Promise<NotificationCoreProto.Empty> {
-    const data = new ValidationPipe<SendTwoFactorDto>(
-      twoFactorSchema,
-    ).transform(request);
     await this.twoFactorService.sendTwoFactor(
       data.provider,
       data.userId,
@@ -64,11 +63,11 @@ export class NotificationController
 
   @GrpcMethod('NotificationService', 'sendPasswordReset')
   public async sendPasswordReset(
-    request: NotificationCoreProto.SendPasswordResetRequest,
+    @GrpcRequest(
+      new ValidationPipe<SendPasswordResetDto>(sendPasswordResetSchema),
+    )
+    data: SendPasswordResetDto,
   ): Promise<NotificationCoreProto.Empty> {
-    const data = new ValidationPipe<SendPasswordResetDto>(
-      sendPasswordResetSchema,
-    ).transform(request);
     await this.passwordResetService.sendPasswordResetEmail(
       data.userId,
       data.token,
@@ -78,33 +77,35 @@ export class NotificationController
 
   @GrpcMethod('NotificationService', 'sendWelcome')
   public async sendWelcome(
-    request: NotificationCoreProto.SendWelcomeRequest,
+    @GrpcRequest(
+      new ValidationPipe<SendWelcomeEmailDto>(sendWelcomeEmailSchema),
+    )
+    data: SendWelcomeEmailDto,
   ): Promise<NotificationCoreProto.Empty> {
-    const data = new ValidationPipe<SendWelcomeEmailDto>(
-      sendWelcomeEmailSchema,
-    ).transform(request);
     await this.welcomeEmailService.sendWelcomeEmail(data.userId);
     return {};
   }
 
   @GrpcMethod('NotificationService', 'sendEmailChangeCode')
   public async sendEmailChangeCode(
-    request: NotificationCoreProto.SendEmailChangeCodeRequest,
+    @GrpcRequest(
+      new ValidationPipe<SendEmailChangeCodeDto>(sendEmailChangeCodeSchema),
+    )
+    data: SendEmailChangeCodeDto,
   ): Promise<NotificationCoreProto.Empty> {
-    const data = new ValidationPipe<SendEmailChangeCodeDto>(
-      sendEmailChangeCodeSchema,
-    ).transform(request);
     await this.emailChangeService.sendChangeCode(data.email, data.code);
     return {};
   }
 
   @GrpcMethod('NotificationService', 'sendEmailChangeWarning')
   public async sendEmailChangeWarning(
-    request: NotificationCoreProto.SendEmailChangeWarningRequest,
+    @GrpcRequest(
+      new ValidationPipe<SendEmailChangeWarningDto>(
+        sendEmailChangeWarningSchema,
+      ),
+    )
+    data: SendEmailChangeWarningDto,
   ): Promise<NotificationCoreProto.Empty> {
-    const data = new ValidationPipe<SendEmailChangeWarningDto>(
-      sendEmailChangeWarningSchema,
-    ).transform(request);
     await this.emailChangeService.sendChangeWarning(data.email, data.newEmail);
     return {};
   }
