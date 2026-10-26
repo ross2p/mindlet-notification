@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import type { SendTwoFactorDto } from './dtos/send-two-factor.dto';
-import { NotificationCoreProto } from '@ross2p/common';
+import { NotificationCoreProto } from '../../generated/protos';
 
 export const twoFactorSchema = Joi.object<SendTwoFactorDto>({
   userId: Joi.string().uuid().required(),

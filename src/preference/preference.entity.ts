@@ -1,4 +1,4 @@
-import { NotificationPreferenceProto } from '@ross2p/common';
+import { NotificationPreferenceProto } from '../../generated/protos';
 import type { NotificationPreference } from '.prisma/client-notification';
 
 export class PreferenceEntity implements NotificationPreference {
