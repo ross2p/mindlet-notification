@@ -14,19 +14,12 @@ spec:
     - Ingress
     - Egress
   ingress:
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: ingress-nginx
-      ports:
-        - protocol: TCP
-          port: 3000
     # gRPC from sibling services in the namespace
     - from:
         - podSelector: {}
       ports:
         - protocol: TCP
-          port: 50059
+          port: 50051
   egress:
     - to:
         - namespaceSelector:
@@ -57,4 +50,4 @@ spec:
               app.kubernetes.io/part-of: mindlet
       ports:
         - protocol: TCP
-          port: 3000
+          port: 50051

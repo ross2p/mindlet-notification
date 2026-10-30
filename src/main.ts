@@ -32,22 +32,23 @@ async function bootstrap() {
     },
   });
 
-  app.connectMicroservice<GrpcOptions>({
-    transport: Transport.GRPC,
-    options: {
-      package: NOTIFICATION_GRPC_PACKAGES,
-      protoPath: NOTIFICATION_GRPC_PROTO_PATHS,
-      loader: NOTIFICATION_GRPC_LOADER_OPTIONS,
-      url:
-        configService.get<string>('NOTIFICATION_GRPC_URL') ?? '0.0.0.0:50059',
+  app.connectMicroservice<GrpcOptions>(
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: NOTIFICATION_GRPC_PACKAGES,
+        protoPath: NOTIFICATION_GRPC_PROTO_PATHS,
+        loader: NOTIFICATION_GRPC_LOADER_OPTIONS,
+        url: configService.getOrThrow<string>('NOTIFICATION_GRPC_URL'),
+      },
     },
-  });
+    { inheritAppConfig: true },
+  );
 
   await app.startAllMicroservices();
 
-  const port = configService.get<number>('PORT') || 3000;
-  await app.listen(port);
-  logger.log(`🚀 Application is running on port ${port}`);
+  await app.init();
+  logger.log('🚀 gRPC microservice started');
 }
 
 void bootstrap();

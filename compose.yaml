@@ -44,8 +44,6 @@ services:
       context: .
       dockerfile: Dockerfile
     hostname: notification-service
-    ports:
-      - "${BACKEND_PORT:-4007}:3000"
     env_file:
       - ./.env
     environment:
